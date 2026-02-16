@@ -18,7 +18,7 @@ import {
 export default function Pricing() {
   useSEO({
     title: 'Pricing - Simple, Transparent Plans for Families | ALBERTai',
-    description: 'ALBERTai costs just $19.99/month - less than one home health visit. Includes Aging In Place Score™, personalized care plan, family dashboard, and 30-day money-back guarantee.',
+    description: 'ALBERTai costs just $35/month - less than one home health visit. Includes Aging In Place Score™, personalized care plan, family dashboard, and 30-day money-back guarantee.',
     keywords: 'albert.ai pricing, aging in place cost, senior care pricing, caregiver support cost, elder care subscription'
   })
   const features = [
@@ -91,7 +91,7 @@ export default function Pricing() {
               <div className="bg-gradient-to-r from-primary-500 to-secondary-500 p-8 lg:p-12 text-center text-white">
                 <h2 className="text-3xl font-bold mb-4">Monthly Subscription</h2>
                 <div className="flex items-baseline justify-center mb-4">
-                  <span className="text-6xl lg:text-7xl font-bold">$19.99</span>
+                  <span className="text-6xl lg:text-7xl font-bold">$35</span>
                   <span className="text-2xl lg:text-3xl ml-2 opacity-90">/month</span>
                 </div>
                 <p className="text-lg opacity-90">Billed monthly • Cancel anytime</p>
@@ -175,7 +175,7 @@ export default function Pricing() {
               Peace of mind shouldn't be a luxury.
             </p>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              For less than $20 a month, ALBERTai gives you the data-driven insights 
+              For just $35 a month, ALBERTai gives you the data-driven insights 
               and early warnings that can prevent costly emergencies and keep your parent safe at home longer.
             </p>
           </div>
@@ -208,8 +208,8 @@ export default function Pricing() {
                 <tbody className="divide-y divide-gray-200">
                   <tr className="bg-primary-50 hover:bg-primary-100 transition-colors">
                     <td className="py-6 px-6 font-bold text-primary-700">ALBERTai</td>
-                    <td className="py-6 px-6 text-gray-900 font-semibold">$19.99</td>
-                    <td className="py-6 px-6 text-gray-900 font-semibold">$239.88</td>
+                    <td className="py-6 px-6 text-gray-900 font-semibold">$35</td>
+                    <td className="py-6 px-6 text-gray-900 font-semibold">$420</td>
                     <td className="py-6 px-6 text-gray-700">Continuous monitoring, predictive insights, peace of mind</td>
                   </tr>
                   <tr className="hover:bg-gray-50 transition-colors">

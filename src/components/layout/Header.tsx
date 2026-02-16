@@ -48,8 +48,10 @@ function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm">
-              Sign In
+            <Button variant="outline" size="sm" asChild>
+              <a href="https://aginginplace-mvp.web.app/" target="_blank" rel="noopener noreferrer">
+                Sign In
+              </a>
             </Button>
             <Button size="sm" asChild>
               <Link to="/request-score">
@@ -89,8 +91,15 @@ function Header() {
                 </Link>
               ))}
               <div className="pt-4 space-y-2">
-                <Button variant="outline" className="w-full">
-                  Sign In
+                <Button variant="outline" className="w-full" asChild>
+                  <a
+                    href="https://aginginplace-mvp.web.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign In
+                  </a>
                 </Button>
                 <Button className="w-full" asChild>
                   <Link to="/request-score">
