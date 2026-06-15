@@ -76,16 +76,14 @@ export default function Hero() {
                     >
                       <X className="h-5 w-5" />
                     </button>
-                    <video
-                      className="w-full h-full object-cover"
-                      controls
-                      autoPlay
-                      playsInline
-                      onEnded={() => setIsVideoPlaying(false)}
-                    >
-                      <source src="https://storage.googleapis.com/albertai-dev-videos/videos/AAI_FINAL_UNCOMPRESSED.mp4" type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube.com/embed/8TdFDQds_S8?autoplay=1&rel=0"
+                      title="Watch Family Story"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
                   </>
                 )}
               </div>
