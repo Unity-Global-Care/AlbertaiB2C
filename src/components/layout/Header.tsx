@@ -25,7 +25,7 @@ function Header() {
             <img 
               src="/images/logos/AlbertAI_Tagline_Color_R.png" 
               alt="ALBERTai" 
-              className="h-20 md:h-[100px] w-auto"
+              className="h-14 md:h-16 w-auto"
             />
           </Link>
 
