@@ -65,15 +65,15 @@ export default function RequestScore() {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/b2c/score-requests`, {
+      const response = await fetch(`${API_BASE_URL}/api/public/score-request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email.trim(),
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          relationship: relationship === 'Other' ? customRelationship.trim() : relationship,
-          age: parseInt(age),
+          careRecipientFirstName: firstName.trim() || undefined,
+          careRecipientLastName: lastName.trim() || undefined,
+          relationship: relationship === 'Other' ? customRelationship.trim() : relationship || undefined,
+          careRecipientAge: parseInt(age),
         }),
       })
 
