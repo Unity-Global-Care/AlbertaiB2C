@@ -132,9 +132,6 @@ export default function RequestScore() {
             <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
               Request Received!
             </h1>
-            <p className="text-gray-600">
-              We've saved your request for <strong>{submittedEmail}</strong>.
-            </p>
           </div>
 
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 lg:p-8 text-left space-y-4 text-gray-700">
