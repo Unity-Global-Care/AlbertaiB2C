@@ -33,7 +33,6 @@ export default function RequestScore() {
   const [age, setAge] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [submittedEmail, setSubmittedEmail] = useState('')
   const [error, setError] = useState('')
 
   useSEO({
@@ -82,7 +81,6 @@ export default function RequestScore() {
         throw new Error(data?.message || 'Something went wrong. Please try again.')
       }
 
-      setSubmittedEmail(email.trim())
       setIsSuccess(true)
       setEmail('')
       setFirstName('')
