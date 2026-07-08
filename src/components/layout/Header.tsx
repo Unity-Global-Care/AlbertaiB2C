@@ -30,12 +30,12 @@ function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden lg:flex space-x-6 xl:space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`text-sm font-medium transition-colors ${
+                className={`text-sm font-medium transition-colors whitespace-nowrap ${
                   location.pathname === item.href
                     ? 'text-primary-600'
                     : 'text-gray-700 hover:text-primary-600'
@@ -47,7 +47,7 @@ function Header() {
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-2 xl:space-x-4">
             <Button variant="outline" size="sm" asChild>
               <a href="https://aginginplace-mvp.web.app/" target="_blank" rel="noopener noreferrer">
                 Sign In
@@ -55,13 +55,14 @@ function Header() {
             </Button>
             <Button size="sm" asChild>
               <Link to="/request-score">
-                Request An Aging In Place Score
+                <span className="hidden xl:inline">Request An Aging In Place Score</span>
+                <span className="xl:hidden">Get Your Score</span>
               </Link>
             </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="icon"
@@ -74,7 +75,7 @@ function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
               {navigation.map((item) => (
                 <Link

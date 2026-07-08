@@ -4,12 +4,32 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
-import { ArrowRight, CheckCircle2, Mail, Calendar, Users, Shield, TrendingUp, Heart } from 'lucide-react'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { db } from '@/config/firebase'
+import { ArrowRight, CheckCircle2, Mail, Calendar, Users, Shield, TrendingUp, Heart, User } from 'lucide-react'
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'
+
+const RELATIONSHIP_OPTIONS = [
+  'Father',
+  'Mother',
+  'Grandfather',
+  'Grandmother',
+  'Stepfather',
+  'Stepmother',
+  'Father-in-law',
+  'Mother-in-law',
+  'Aunt',
+  'Uncle',
+  'Spouse',
+  'Sibling',
+  'Other',
+]
 
 export default function RequestScore() {
   const [email, setEmail] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [relationship, setRelationship] = useState('')
+  const [customRelationship, setCustomRelationship] = useState('')
   const [age, setAge] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -37,26 +57,42 @@ export default function RequestScore() {
       return
     }
 
+    if (relationship === 'Other' && !customRelationship.trim()) {
+      setError('Please specify your relationship to the person you care for')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
-      // Save to Firestore
-      await addDoc(collection(db, 'scoreRequests'), {
-        email: email.trim(),
-        age: parseInt(age),
-        createdAt: serverTimestamp(),
-        status: 'pending',
-        emailVerified: false
+      const response = await fetch(`${API_BASE_URL}/api/b2c/score-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          relationship: relationship === 'Other' ? customRelationship.trim() : relationship,
+          age: parseInt(age),
+        }),
       })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.message || 'Something went wrong. Please try again.')
+      }
 
       setSubmittedEmail(email.trim())
       setIsSuccess(true)
       setEmail('')
+      setFirstName('')
+      setLastName('')
+      setRelationship('')
+      setCustomRelationship('')
       setAge('')
-      // Note: Verification email will be sent automatically via Cloud Function
     } catch (err) {
       console.error('Error submitting request:', err)
-      setError('Something went wrong. Please try again or contact support@goalbertai.com')
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or contact support@goalbertai.com')
     } finally {
       setIsSubmitting(false)
     }
@@ -87,42 +123,61 @@ export default function RequestScore() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20">
-        <Card className="max-w-2xl mx-auto p-8 lg:p-12 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
-            <CheckCircle2 className="h-10 w-10 text-green-600" />
-          </div>
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            Request Received!
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Thank you for requesting an Aging In Place Score™. We've received your request!
-          </p>
-          <p className="text-gray-600 mb-8">
-            Please check your email at <strong>{submittedEmail}</strong> to verify your email address. We've sent you a verification link that will expire in 24 hours.
-          </p>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
-            <div className="flex items-start">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-blue-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-blue-900 mb-1">Next Steps</h3>
-                <p className="text-sm text-blue-800">
-                  Click the verification link in your email to continue. After verification, our team will prepare your personalized questionnaire and contact you when it's ready.
-                </p>
-              </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20 px-4">
+        <Card className="max-w-2xl mx-auto p-8 lg:p-12">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+              <CheckCircle2 className="h-10 w-10 text-green-600" />
             </div>
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+              Request Received!
+            </h1>
+            <p className="text-gray-600">
+              We've saved your request for <strong>{submittedEmail}</strong>.
+            </p>
           </div>
-          <Button 
-            size="lg" 
-            className="text-lg px-8 py-4"
-            onClick={() => setIsSuccess(false)}
-          >
-            Submit Another Request
-          </Button>
+
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 lg:p-8 text-left space-y-4 text-gray-700">
+            <p>
+              Hello, my name is Dave, the Founder and CEO of Unity Global Care. I would personally like to thank you for requesting an Aging In Place Score for your loved one, because we all want to know if Mom and/or Dad is really ok living alone.
+            </p>
+            <p>
+              I am happy to let you know that ALBERTai, our Aging-In-Place Score, is about 4 weeks away from our much anticipated launch date, and I can assure you that we are building and launching something very special to help families with aging loved ones, caregivers, and extended care team.
+            </p>
+            <p>
+              For the last several months, we have been testing it with a large number of families and receiving very positive feedback.
+            </p>
+            <p>
+              Please keep an eye out for another email from our team announcing our launch.
+            </p>
+            <p>
+              Every person who registers in the first 60 days after launch will receive a <strong>FREE lifetime membership</strong> to ALBERTai — you will always have the resources to assist you in making the best possible proactive health and wellness decisions for your aging loved one and family.
+            </p>
+            <p>
+              If you have any questions, please feel free to reach out to me directly at{' '}
+              <a href="mailto:DaveD@UnityGlobalCare.com" className="text-primary-600 font-medium hover:underline">
+                DaveD@UnityGlobalCare.com
+              </a>{' '}
+              and I will do my very best to assist you.
+            </p>
+            <p className="pt-2">
+              All My Very Best,
+              <br />
+              <strong>Dave</strong>
+              <br />
+              Founder &amp; CEO, Unity Global Care
+            </p>
+          </div>
+
+          <div className="text-center mt-8">
+            <Button
+              size="lg"
+              className="text-lg px-8 py-4"
+              onClick={() => setIsSuccess(false)}
+            >
+              Submit Another Request
+            </Button>
+          </div>
         </Card>
       </div>
     )
@@ -145,8 +200,8 @@ export default function RequestScore() {
 
       {/* Main Content */}
       <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Left Column - Content */}
             <div className="lg:col-span-2 space-y-8">
               <div>
@@ -181,8 +236,8 @@ export default function RequestScore() {
             </div>
 
             {/* Right Column - Form */}
-            <div className="lg:col-span-1">
-              <Card className="p-6 lg:p-8 sticky top-24">
+            <div className="lg:col-span-3">
+              <Card className="p-6 lg:p-10 sticky top-24">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   Begin the Request
                 </h3>
@@ -207,23 +262,95 @@ export default function RequestScore() {
                     />
                   </div>
 
-                  <div>
-                    <Label htmlFor="age" className="flex items-center gap-2 mb-2">
-                      <Calendar className="h-4 w-4 text-gray-500" />
-                      Age of Person You Care For
-                    </Label>
-                    <Input
-                      id="age"
-                      type="number"
-                      placeholder="65"
-                      min="1"
-                      max="150"
-                      value={age}
-                      onChange={(e) => setAge(e.target.value)}
-                      required
-                      className="w-full"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="firstName" className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-500" />
+                        First Name of Person You Care For (optional)
+                      </Label>
+                      <Input
+                        id="firstName"
+                        type="text"
+                        placeholder="Jane"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="lastName" className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-500" />
+                        Last Name of Person You Care For (optional)
+                      </Label>
+                      <Input
+                        id="lastName"
+                        type="text"
+                        placeholder="Doe"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
                   </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="relationship" className="flex items-center gap-2 mb-2">
+                        <Users className="h-4 w-4 text-gray-500" />
+                        Your Relationship to Them (optional)
+                      </Label>
+                      <select
+                        id="relationship"
+                        value={relationship}
+                        onChange={(e) => setRelationship(e.target.value)}
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <option value="">Select a relationship</option>
+                        {RELATIONSHIP_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="age" className="flex items-center gap-2 mb-2">
+                        <Calendar className="h-4 w-4 text-gray-500" />
+                        Age of Person You Care For
+                      </Label>
+                      <Input
+                        id="age"
+                        type="number"
+                        placeholder="65"
+                        min="1"
+                        max="150"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  {relationship === 'Other' && (
+                    <div>
+                      <Label htmlFor="customRelationship" className="flex items-center gap-2 mb-2">
+                        <Users className="h-4 w-4 text-gray-500" />
+                        Please Specify Your Relationship
+                      </Label>
+                      <Input
+                        id="customRelationship"
+                        type="text"
+                        placeholder="e.g. Neighbor, Family Friend"
+                        value={customRelationship}
+                        onChange={(e) => setCustomRelationship(e.target.value)}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+                  )}
 
                   {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">

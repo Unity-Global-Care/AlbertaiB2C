@@ -276,7 +276,7 @@ export default function VerifyEmail() {
 
   // Default error state
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20 px-4">
       <Card className="max-w-2xl mx-auto p-8 lg:p-12 text-center">
         <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-6">
           <XCircle className="h-10 w-10 text-red-600" />

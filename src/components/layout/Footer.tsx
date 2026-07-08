@@ -212,14 +212,14 @@ function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
-                  className="w-full md:w-64 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-white placeholder-gray-400"
+                  className="w-full md:w-64 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg md:rounded-l-lg md:rounded-r-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-white placeholder-gray-400"
                   required
                 />
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting || isSuccess}
-                className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-r-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg md:rounded-r-lg md:rounded-l-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

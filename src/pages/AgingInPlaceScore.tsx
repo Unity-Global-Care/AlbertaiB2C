@@ -138,7 +138,7 @@ export default function AgingInPlaceScore() {
               What the Score Means
             </h3>
             
-            <div className="overflow-x-auto">
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b-2 border-gray-300">
@@ -169,7 +169,7 @@ export default function AgingInPlaceScore() {
             </div>
 
             {/* Detailed Range Cards for Mobile */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:hidden">
+            <div className="mt-8 grid grid-cols-1 gap-6 md:hidden">
               {scoreRanges.map((range, index) => (
                 <div
                   key={index}
