@@ -111,4 +111,4 @@ Toll-free: 800.315.1217
 
 You also have the right to file a complaint directly with the U.S. Department of Health and Human Services, Office for Civil Rights, at www.hhs.gov/ocr/complaints. We will not retaliate against you for filing a complaint.
 
-*Effective Date: March 3, 2026 | Last Revised: June 8, 2026*
+*Effective Date: March 3, 2026 | Last Revised: Aug 3, 2026*

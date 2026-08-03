@@ -692,4 +692,4 @@ If you are not satisfied with our response, you may have the right to contact yo
 
 Unity Global Care, Inc. is a Delaware corporation. ALBERTai is owned and operated by Unity Global Care, Inc.
 
-*Effective Date: March 11, 2025 | Last Revised: June 8, 2026*
+*Effective Date: March 11, 2025 | Last Revised: Aug 3, 2026*
