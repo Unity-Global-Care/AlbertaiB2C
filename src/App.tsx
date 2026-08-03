@@ -9,6 +9,8 @@ import ArticlePage from '@/pages/ArticlePage'
 import About from '@/pages/About'
 import Support from '@/pages/Support'
 import Privacy from '@/pages/Privacy'
+import Terms from '@/pages/Terms'
+import Hipaa from '@/pages/Hipaa'
 import RequestScore from '@/pages/RequestScore'
 import VerifyEmail from '@/pages/VerifyEmail'
 
@@ -26,7 +28,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/support" element={<Support />} />
           <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/hipaa" element={<Hipaa />} />
           <Route path="/request-score" element={<RequestScore />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
