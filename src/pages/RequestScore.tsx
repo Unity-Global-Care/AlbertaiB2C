@@ -25,6 +25,8 @@ const RELATIONSHIP_OPTIONS = [
 ]
 
 export default function RequestScore() {
+  const [yourFirstName, setYourFirstName] = useState('')
+  const [yourLastName, setYourLastName] = useState('')
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -46,11 +48,16 @@ export default function RequestScore() {
     setError('')
     
     // Validation
+    if (!yourFirstName.trim() || !yourLastName.trim()) {
+      setError('Please enter your first and last name')
+      return
+    }
+
     if (!email || !email.includes('@')) {
       setError('Please enter a valid email address')
       return
     }
-    
+
     if (!age || parseInt(age) < 1 || parseInt(age) > 150) {
       setError('Please enter a valid age')
       return
@@ -69,6 +76,8 @@ export default function RequestScore() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email.trim(),
+          firstName: yourFirstName.trim(),
+          lastName: yourLastName.trim(),
           careRecipientFirstName: firstName.trim() || undefined,
           careRecipientLastName: lastName.trim() || undefined,
           relationship: relationship === 'Other' ? customRelationship.trim() : relationship || undefined,
@@ -82,6 +91,8 @@ export default function RequestScore() {
       }
 
       setIsSuccess(true)
+      setYourFirstName('')
+      setYourLastName('')
       setEmail('')
       setFirstName('')
       setLastName('')
@@ -241,6 +252,40 @@ export default function RequestScore() {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="yourFirstName" className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-500" />
+                        Your First Name
+                      </Label>
+                      <Input
+                        id="yourFirstName"
+                        type="text"
+                        placeholder="John"
+                        value={yourFirstName}
+                        onChange={(e) => setYourFirstName(e.target.value)}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="yourLastName" className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-500" />
+                        Your Last Name
+                      </Label>
+                      <Input
+                        id="yourLastName"
+                        type="text"
+                        placeholder="Smith"
+                        value={yourLastName}
+                        onChange={(e) => setYourLastName(e.target.value)}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <Label htmlFor="email" className="flex items-center gap-2 mb-2">
                       <Mail className="h-4 w-4 text-gray-500" />
@@ -261,7 +306,7 @@ export default function RequestScore() {
                     <div>
                       <Label htmlFor="firstName" className="flex items-center gap-2 mb-2">
                         <User className="h-4 w-4 text-gray-500" />
-                        First Name of Person You Care For (optional)
+                        First Name of Person You Care For
                       </Label>
                       <Input
                         id="firstName"
@@ -269,6 +314,7 @@ export default function RequestScore() {
                         placeholder="Jane"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        required
                         className="w-full"
                       />
                     </div>
@@ -276,7 +322,7 @@ export default function RequestScore() {
                     <div>
                       <Label htmlFor="lastName" className="flex items-center gap-2 mb-2">
                         <User className="h-4 w-4 text-gray-500" />
-                        Last Name of Person You Care For (optional)
+                        Last Name of Person You Care For
                       </Label>
                       <Input
                         id="lastName"
@@ -284,6 +330,7 @@ export default function RequestScore() {
                         placeholder="Doe"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        required
                         className="w-full"
                       />
                     </div>
@@ -293,12 +340,13 @@ export default function RequestScore() {
                     <div>
                       <Label htmlFor="relationship" className="flex items-center gap-2 mb-2">
                         <Users className="h-4 w-4 text-gray-500" />
-                        Your Relationship to Them (optional)
+                        Your Relationship to Them
                       </Label>
                       <select
                         id="relationship"
                         value={relationship}
                         onChange={(e) => setRelationship(e.target.value)}
+                        required
                         className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <option value="">Select a relationship</option>
