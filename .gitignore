@@ -23,13 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Firebase
-.firebase/
-.firebaserc.local
-firebase-debug.log
-firestore-debug.log
-ui-debug.log
-
 # Environment variables
 .env
 .env.local

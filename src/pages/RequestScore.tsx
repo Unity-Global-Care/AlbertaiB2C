@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
+import PostSubmitInterstitial from '@/components/marketing/PostSubmitInterstitial'
 import { ArrowRight, CheckCircle2, Mail, Calendar, Users, Shield, TrendingUp, Heart, User } from 'lucide-react'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'
@@ -24,7 +25,19 @@ const RELATIONSHIP_OPTIONS = [
   'Other',
 ]
 
+type ScoreRequestNext = {
+  downloadAppUrl: string | null
+  pwaUrl: string
+}
+
+type ScoreRequestSuccessResponse = {
+  success?: boolean
+  next?: Partial<ScoreRequestNext>
+}
+
 export default function RequestScore() {
+  const [yourFirstName, setYourFirstName] = useState('')
+  const [yourLastName, setYourLastName] = useState('')
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -32,7 +45,7 @@ export default function RequestScore() {
   const [customRelationship, setCustomRelationship] = useState('')
   const [age, setAge] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [submitNext, setSubmitNext] = useState<ScoreRequestNext | null>(null)
   const [error, setError] = useState('')
 
   useSEO({
@@ -41,18 +54,45 @@ export default function RequestScore() {
     keywords: 'aging in place score, request score, elder care assessment, caregiver assessment'
   })
 
+  const resetForm = () => {
+    setYourFirstName('')
+    setYourLastName('')
+    setEmail('')
+    setFirstName('')
+    setLastName('')
+    setRelationship('')
+    setCustomRelationship('')
+    setAge('')
+    setSubmitNext(null)
+    setError('')
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    
-    // Validation
+
+    if (!yourFirstName.trim() || !yourLastName.trim()) {
+      setError('Please enter your first and last name')
+      return
+    }
+
     if (!email || !email.includes('@')) {
       setError('Please enter a valid email address')
       return
     }
-    
+
+    if (!firstName.trim() || !lastName.trim()) {
+      setError('Please enter the first and last name of the person you care for')
+      return
+    }
+
     if (!age || parseInt(age) < 1 || parseInt(age) > 150) {
       setError('Please enter a valid age')
+      return
+    }
+
+    if (!relationship) {
+      setError('Please select your relationship to the person you care for')
       return
     }
 
@@ -69,19 +109,28 @@ export default function RequestScore() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email.trim(),
-          careRecipientFirstName: firstName.trim() || undefined,
-          careRecipientLastName: lastName.trim() || undefined,
-          relationship: relationship === 'Other' ? customRelationship.trim() : relationship || undefined,
+          firstName: yourFirstName.trim(),
+          lastName: yourLastName.trim(),
+          careRecipientFirstName: firstName.trim(),
+          careRecipientLastName: lastName.trim(),
+          relationship: relationship === 'Other' ? customRelationship.trim() : relationship,
           careRecipientAge: parseInt(age),
         }),
       })
 
+      const data = (await response.json().catch(() => null)) as ScoreRequestSuccessResponse | { message?: string } | null
+
       if (!response.ok) {
-        const data = await response.json().catch(() => null)
-        throw new Error(data?.message || 'Something went wrong. Please try again.')
+        throw new Error(data && 'message' in data && data.message ? data.message : 'Something went wrong. Please try again.')
       }
 
-      setIsSuccess(true)
+      const next = data && 'next' in data ? data.next : undefined
+      setSubmitNext({
+        downloadAppUrl: next?.downloadAppUrl ?? null,
+        pwaUrl: next?.pwaUrl || '/login',
+      })
+      setYourFirstName('')
+      setYourLastName('')
       setEmail('')
       setFirstName('')
       setLastName('')
@@ -119,7 +168,7 @@ export default function RequestScore() {
     }
   ]
 
-  if (isSuccess) {
+  if (submitNext) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20 px-4">
         <Card className="max-w-2xl mx-auto p-8 lg:p-12">
@@ -132,7 +181,13 @@ export default function RequestScore() {
             </h1>
           </div>
 
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 lg:p-8 text-left space-y-4 text-gray-700">
+          <PostSubmitInterstitial
+            downloadAppUrl={submitNext.downloadAppUrl}
+            pwaUrl={submitNext.pwaUrl}
+          />
+
+          {/* Founder letter: kept below interstitial CTAs per product request */}
+          <div className="mt-10 bg-primary-50 border border-primary-200 rounded-lg p-6 lg:p-8 text-left space-y-4 text-gray-700">
             <p>
               Hello, my name is Dave, the Founder and CEO of Unity Global Care. I would personally like to thank you for requesting an Aging In Place Score for your loved one, because we all want to know if Mom and/or Dad is really ok living alone.
             </p>
@@ -168,7 +223,7 @@ export default function RequestScore() {
             <Button
               size="lg"
               className="text-lg px-8 py-4"
-              onClick={() => setIsSuccess(false)}
+              onClick={resetForm}
             >
               Submit Another Request
             </Button>
@@ -188,7 +243,7 @@ export default function RequestScore() {
           </h1>
           <p className="text-xl lg:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
             Understanding how well your loved one is aging in place should not feel complicated. 
-            ALBERTai begins with two simple pieces of information: your email and the age of the person you care for.
+            ALBERTai begins with a few simple details about you and the person you care for.
           </p>
         </div>
       </section>
@@ -237,10 +292,44 @@ export default function RequestScore() {
                   Begin the Request
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Share your email and age of the person you care for.
+                  Tell us about yourself and the person you care for.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="yourFirstName" className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-500" />
+                        Your First Name
+                      </Label>
+                      <Input
+                        id="yourFirstName"
+                        type="text"
+                        placeholder="John"
+                        value={yourFirstName}
+                        onChange={(e) => setYourFirstName(e.target.value)}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="yourLastName" className="flex items-center gap-2 mb-2">
+                        <User className="h-4 w-4 text-gray-500" />
+                        Your Last Name
+                      </Label>
+                      <Input
+                        id="yourLastName"
+                        type="text"
+                        placeholder="Smith"
+                        value={yourLastName}
+                        onChange={(e) => setYourLastName(e.target.value)}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <Label htmlFor="email" className="flex items-center gap-2 mb-2">
                       <Mail className="h-4 w-4 text-gray-500" />
@@ -261,7 +350,7 @@ export default function RequestScore() {
                     <div>
                       <Label htmlFor="firstName" className="flex items-center gap-2 mb-2">
                         <User className="h-4 w-4 text-gray-500" />
-                        First Name of Person You Care For (optional)
+                        First Name of Person You Care For
                       </Label>
                       <Input
                         id="firstName"
@@ -269,6 +358,7 @@ export default function RequestScore() {
                         placeholder="Jane"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        required
                         className="w-full"
                       />
                     </div>
@@ -276,7 +366,7 @@ export default function RequestScore() {
                     <div>
                       <Label htmlFor="lastName" className="flex items-center gap-2 mb-2">
                         <User className="h-4 w-4 text-gray-500" />
-                        Last Name of Person You Care For (optional)
+                        Last Name of Person You Care For
                       </Label>
                       <Input
                         id="lastName"
@@ -284,6 +374,7 @@ export default function RequestScore() {
                         placeholder="Doe"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        required
                         className="w-full"
                       />
                     </div>
@@ -293,12 +384,13 @@ export default function RequestScore() {
                     <div>
                       <Label htmlFor="relationship" className="flex items-center gap-2 mb-2">
                         <Users className="h-4 w-4 text-gray-500" />
-                        Your Relationship to Them (optional)
+                        Your Relationship to Them
                       </Label>
                       <select
                         id="relationship"
                         value={relationship}
                         onChange={(e) => setRelationship(e.target.value)}
+                        required
                         className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <option value="">Select a relationship</option>
@@ -393,4 +485,3 @@ export default function RequestScore() {
     </div>
   )
 }
-

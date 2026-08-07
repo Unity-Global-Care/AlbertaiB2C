@@ -12,7 +12,6 @@ import Privacy from '@/pages/Privacy'
 import Terms from '@/pages/Terms'
 import Hipaa from '@/pages/Hipaa'
 import RequestScore from '@/pages/RequestScore'
-import VerifyEmail from '@/pages/VerifyEmail'
 
 function App() {
   return (
@@ -31,7 +30,6 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/hipaa" element={<Hipaa />} />
           <Route path="/request-score" element={<RequestScore />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
       </Layout>
     </Router>

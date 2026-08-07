@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Shield, Mail, Phone, Facebook, Twitter, Linkedin, CheckCircle2 } from 'lucide-react'
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore'
-import { db } from '@/config/firebase'
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'
 
 function Footer() {
   const currentYear = new Date().getFullYear()
@@ -53,27 +53,19 @@ function Footer() {
     setIsSubmitting(true)
 
     try {
-      // Check if email already exists
-      const existingQuery = query(
-        collection(db, 'newsletterSubscriptions'),
-        where('email', '==', trimmedEmail),
-        where('status', '==', 'active')
-      )
-      const existingDocs = await getDocs(existingQuery)
-      
-      if (!existingDocs.empty) {
-        setError('This email is already subscribed')
-        setIsSubmitting(false)
-        return
-      }
-
-      // Save to Firestore
-      await addDoc(collection(db, 'newsletterSubscriptions'), {
-        email: trimmedEmail,
-        subscribedAt: serverTimestamp(),
-        status: 'active',
-        source: 'footer'
+      const response = await fetch(`${API_BASE_URL}/api/public/newsletter-subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          source: 'goalbertai_footer',
+        }),
       })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.message || 'Subscription failed')
+      }
 
       setIsSuccess(true)
       setEmail('')
