@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSEO } from '@/hooks/useSEO'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -45,6 +46,8 @@ export default function RequestScore() {
   const [relationship, setRelationship] = useState('')
   const [customRelationship, setCustomRelationship] = useState('')
   const [age, setAge] = useState('')
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitNext, setSubmitNext] = useState<ScoreRequestNext | null>(null)
   const [error, setError] = useState('')
@@ -73,6 +76,8 @@ export default function RequestScore() {
     setRelationship('')
     setCustomRelationship('')
     setAge('')
+    setAcceptedPrivacy(false)
+    setAcceptedTerms(false)
     setSubmitNext(null)
     setError('')
   }
@@ -108,6 +113,11 @@ export default function RequestScore() {
 
     if (relationship === 'Other' && !customRelationship.trim()) {
       setError('Please specify your relationship to the person you care for')
+      return
+    }
+
+    if (!acceptedPrivacy || !acceptedTerms) {
+      setError('Please agree to the Privacy Policy and Terms of Service to continue')
       return
     }
 
@@ -149,6 +159,8 @@ export default function RequestScore() {
       setRelationship('')
       setCustomRelationship('')
       setAge('')
+      setAcceptedPrivacy(false)
+      setAcceptedTerms(false)
     } catch (err) {
       console.error('Error submitting request:', err)
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or contact support@goalbertai.com')
@@ -458,19 +470,60 @@ export default function RequestScore() {
                     </div>
                   )}
 
+                  <div className="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={acceptedPrivacy}
+                        onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      />
+                      <span className="text-sm text-gray-700 leading-relaxed">
+                        I have read and agree to the{' '}
+                        <Link
+                          to="/privacy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-primary-600 hover:underline"
+                        >
+                          Privacy Policy
+                        </Link>
+                      </span>
+                    </label>
+
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={acceptedTerms}
+                        onChange={(e) => setAcceptedTerms(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      />
+                      <span className="text-sm text-gray-700 leading-relaxed">
+                        I have read and agree to the{' '}
+                        <Link
+                          to="/terms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-primary-600 hover:underline"
+                        >
+                          Terms of Service
+                        </Link>
+                      </span>
+                    </label>
+                  </div>
+
                   <Button
                     type="submit"
                     size="lg"
                     className="w-full text-lg px-8 py-4"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !acceptedPrivacy || !acceptedTerms}
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit'}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
 
                   <p className="text-xs text-gray-500 text-center">
-                    By submitting, you agree to our Privacy Policy and Terms of Service. 
-                    We'll never share your information with third parties.
+                    We&apos;ll never share your information with third parties.
                   </p>
                 </form>
               </Card>
