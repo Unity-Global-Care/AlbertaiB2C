@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { getB2CSignInUrl } from '@/config/b2cApp'
 
 function Header() {
+  const signInUrl = getB2CSignInUrl()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
 
@@ -49,7 +51,7 @@ function Header() {
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-2 xl:space-x-4">
             <Button variant="outline" size="sm" asChild>
-              <a href="https://aginginplace-mvp.web.app/" target="_blank" rel="noopener noreferrer">
+              <a href={signInUrl}>
                 Sign In
               </a>
             </Button>
@@ -94,9 +96,7 @@ function Header() {
               <div className="pt-4 space-y-2">
                 <Button variant="outline" className="w-full" asChild>
                   <a
-                    href="https://aginginplace-mvp.web.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={signInUrl}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign In
