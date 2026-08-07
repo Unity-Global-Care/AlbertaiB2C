@@ -28,6 +28,7 @@ const RELATIONSHIP_OPTIONS = [
 type ScoreRequestNext = {
   downloadAppUrl: string | null
   pwaUrl: string
+  email: string
 }
 
 type ScoreRequestSuccessResponse = {
@@ -125,9 +126,11 @@ export default function RequestScore() {
       }
 
       const next = data && 'next' in data ? data.next : undefined
+      const submittedEmail = email.trim()
       setSubmitNext({
         downloadAppUrl: next?.downloadAppUrl ?? null,
         pwaUrl: next?.pwaUrl || '/login',
+        email: submittedEmail,
       })
       setYourFirstName('')
       setYourLastName('')
@@ -182,6 +185,7 @@ export default function RequestScore() {
           </div>
 
           <PostSubmitInterstitial
+            email={submitNext.email}
             downloadAppUrl={submitNext.downloadAppUrl}
             pwaUrl={submitNext.pwaUrl}
           />
