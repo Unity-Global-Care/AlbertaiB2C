@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSEO } from '@/hooks/useSEO'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -48,6 +48,15 @@ export default function RequestScore() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitNext, setSubmitNext] = useState<ScoreRequestNext | null>(null)
   const [error, setError] = useState('')
+  const successRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!submitNext) return
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+    successRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' })
+  }, [submitNext])
 
   useSEO({
     title: 'Request An Aging In Place Score - ALBERTai',
@@ -173,7 +182,7 @@ export default function RequestScore() {
 
   if (submitNext) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-20 px-4">
+      <div ref={successRef} className="bg-gray-50 py-12 px-4 scroll-mt-24">
         <Card className="max-w-2xl mx-auto p-8 lg:p-12">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
