@@ -10,6 +10,7 @@ import About from '@/pages/About'
 import Support from '@/pages/Support'
 import Privacy from '@/pages/Privacy'
 import Terms from '@/pages/Terms'
+import ImportantInformation from '@/pages/ImportantInformation'
 import Hipaa from '@/pages/Hipaa'
 import RequestScore from '@/pages/RequestScore'
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/important-information" element={<ImportantInformation />} />
           <Route path="/hipaa" element={<Hipaa />} />
           <Route path="/request-score" element={<RequestScore />} />
         </Routes>

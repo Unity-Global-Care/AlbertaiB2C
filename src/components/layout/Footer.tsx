@@ -33,6 +33,7 @@ function Footer() {
     legal: [
       { name: 'Terms of Service', href: '/terms' },
       { name: 'Privacy Policy', href: '/privacy' },
+      { name: 'Please Read: Important Information', href: '/important-information' },
       { name: 'HIPAA Compliance', href: '/hipaa' },
       { name: 'Cookie Policy', href: '/cookies' },
     ],

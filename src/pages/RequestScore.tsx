@@ -48,6 +48,7 @@ export default function RequestScore() {
   const [age, setAge] = useState('')
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [acceptedImportantInfo, setAcceptedImportantInfo] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitNext, setSubmitNext] = useState<ScoreRequestNext | null>(null)
   const [error, setError] = useState('')
@@ -78,6 +79,7 @@ export default function RequestScore() {
     setAge('')
     setAcceptedPrivacy(false)
     setAcceptedTerms(false)
+    setAcceptedImportantInfo(false)
     setSubmitNext(null)
     setError('')
   }
@@ -116,8 +118,8 @@ export default function RequestScore() {
       return
     }
 
-    if (!acceptedPrivacy || !acceptedTerms) {
-      setError('Please agree to the Privacy Policy and Terms of Service to continue')
+    if (!acceptedPrivacy || !acceptedTerms || !acceptedImportantInfo) {
+      setError('Please agree to the Privacy Policy, Terms of Service, and Important Information to continue')
       return
     }
 
@@ -161,6 +163,7 @@ export default function RequestScore() {
       setAge('')
       setAcceptedPrivacy(false)
       setAcceptedTerms(false)
+      setAcceptedImportantInfo(false)
     } catch (err) {
       console.error('Error submitting request:', err)
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again or contact support@goalbertai.com')
@@ -510,13 +513,33 @@ export default function RequestScore() {
                         </Link>
                       </span>
                     </label>
+
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={acceptedImportantInfo}
+                        onChange={(e) => setAcceptedImportantInfo(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      />
+                      <span className="text-sm text-gray-700 leading-relaxed">
+                        I have read and agree to{' '}
+                        <Link
+                          to="/important-information"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-primary-600 hover:underline"
+                        >
+                          Please Read: Important Information
+                        </Link>
+                      </span>
+                    </label>
                   </div>
 
                   <Button
                     type="submit"
                     size="lg"
                     className="w-full text-lg px-8 py-4"
-                    disabled={isSubmitting || !acceptedPrivacy || !acceptedTerms}
+                    disabled={isSubmitting || !acceptedPrivacy || !acceptedTerms || !acceptedImportantInfo}
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit'}
                     <ArrowRight className="ml-2 h-5 w-5" />
