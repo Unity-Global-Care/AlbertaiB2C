@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react'
+import { getB2CSignInUrl } from '@/config/b2cApp'
 
 type PostSubmitInterstitialProps = {
   email: string
