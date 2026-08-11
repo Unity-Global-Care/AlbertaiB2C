@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import PostSubmitInterstitial from '@/components/marketing/PostSubmitInterstitial'
+import { getB2CSignInUrl } from '@/config/b2cApp'
 import { ArrowRight, CheckCircle2, Mail, Calendar, Users, Shield, TrendingUp, Heart, User } from 'lucide-react'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'
@@ -150,7 +151,7 @@ export default function RequestScore() {
       const submittedEmail = email.trim()
       setSubmitNext({
         downloadAppUrl: next?.downloadAppUrl ?? null,
-        pwaUrl: next?.pwaUrl || '/login',
+        pwaUrl: next?.pwaUrl || `${getB2CSignInUrl()}`,
         email: submittedEmail,
       })
       setYourFirstName('')

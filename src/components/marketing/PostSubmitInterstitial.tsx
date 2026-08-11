@@ -13,7 +13,7 @@ type PostSubmitInterstitialProps = {
 export default function PostSubmitInterstitial({
   email,
   downloadAppUrl = null,
-  pwaUrl = '/login',
+  pwaUrl = getB2CSignInUrl(),
 }: PostSubmitInterstitialProps) {
   const showDownload = Boolean(downloadAppUrl)
 
