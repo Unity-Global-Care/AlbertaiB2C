@@ -1,9 +1,9 @@
 {
-  "name": "Albert AI",
-  "short_name": "Albert AI",
-  "description": "Data-driven peace of mind for families caring for aging parents",
+  "name": "Albert.ai",
+  "short_name": "Albert.ai",
+  "description": "Marketing site — install the Family App at app.goalbertai.com for home screen access.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#f4f4f5",
   "theme_color": "#1e40af",
   "icons": [
@@ -12,24 +12,6 @@
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "/images/logos/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logos/app-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/images/logos/app-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }

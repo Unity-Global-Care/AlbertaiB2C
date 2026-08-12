@@ -75,11 +75,12 @@ export default function PostSubmitInterstitial({
           className="block rounded-xl border-2 border-gray-200 bg-white p-5 transition-colors hover:border-primary-200 hover:bg-primary-50"
         >
           <span className="block text-lg font-semibold text-gray-900">
-            Continue in Browser
+            Open the Family App
           </span>
           <span className="mt-1 block text-sm text-gray-600">
-            Use the temporary password from your email to sign in and complete the
-            assessment online
+            Sign in at app.goalbertai.com with the password from your email. After
+            signing in, use Share → Add to Home Screen from the app (not this
+            website) so the icon opens your dashboard directly.
           </span>
         </a>
       </div>
