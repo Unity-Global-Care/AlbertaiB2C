@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SUPPORT_EMAIL } from '@/config/b2cApp'
 import { Link } from 'react-router-dom'
 import { Shield, Mail, Phone, Facebook, Twitter, Linkedin, CheckCircle2 } from 'lucide-react'
 
@@ -76,7 +77,7 @@ function Footer() {
       }, 5000)
     } catch (err) {
       console.error('Error subscribing to newsletter:', err)
-      setError('Something went wrong. Please try again or contact support@goalbert.ai')
+      setError(`Something went wrong. Please try again or contact ${SUPPORT_EMAIL}`)
     } finally {
       setIsSubmitting(false)
     }
@@ -255,7 +256,9 @@ function Footer() {
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <Mail className="h-4 w-4" />
-              <span>support@goalbert.ai</span>
+              <a href={`mailto:${SUPPORT_EMAIL}`} className="hover:text-white transition-colors">
+                {SUPPORT_EMAIL}
+              </a>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <Phone className="h-4 w-4" />

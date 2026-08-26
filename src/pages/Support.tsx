@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useSEO } from '@/hooks/useSEO'
+import { SUPPORT_EMAIL } from '@/config/b2cApp'
 import { Button } from '@/components/ui/button'
 import { 
   Mail, 
@@ -28,7 +29,7 @@ export default function Support() {
       icon: MessageCircle,
       title: "Personalized Help Whenever You Need It",
       description: "Have a question about your parent's Aging In Place Score or about setting up your account? Our support team is ready to help with clear, friendly guidance.",
-      contact: "support@goalbertai.com",
+      contact: SUPPORT_EMAIL,
       details: [
         "Clear, friendly guidance",
         "Expert support team",
@@ -129,7 +130,7 @@ export default function Support() {
     },
     {
       question: "How do I contact support?",
-      answer: "Our team is always here to help. Email us anytime at support@goalbertai.com or call us at 800-314-0255. We respond as quickly as possible so you never feel stuck or alone."
+      answer: `Our team is always here to help. Email us anytime at ${SUPPORT_EMAIL} or call us at 800-314-0255. We respond as quickly as possible so you never feel stuck or alone.`
     }
   ]
 
@@ -311,10 +312,10 @@ export default function Support() {
                 <Mail className="h-8 w-8 mx-auto mb-4" />
                 <h3 className="font-semibold text-lg mb-2">Email Support</h3>
                 <a 
-                  href="mailto:support@goalbertai.com"
+                  href={`mailto:${SUPPORT_EMAIL}`}
                   className="text-white hover:underline font-medium"
                 >
-                  support@goalbertai.com
+                  {SUPPORT_EMAIL}
                 </a>
                 <p className="text-sm opacity-75 mt-2">We respond as quickly as possible</p>
               </div>
@@ -328,7 +329,7 @@ export default function Support() {
             </div>
 
             <a 
-              href="mailto:support@goalbertai.com"
+              href={`mailto:${SUPPORT_EMAIL}`}
               className="inline-flex items-center justify-center bg-white text-primary-600 hover:bg-gray-100 border-2 border-white font-semibold text-lg px-8 py-4 rounded-lg transition-colors"
             >
               Contact Support Now
