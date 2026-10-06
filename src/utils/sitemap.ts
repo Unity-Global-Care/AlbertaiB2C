@@ -29,12 +29,6 @@ export const staticPages: SitemapUrl[] = [
     priority: 0.9
   },
   {
-    loc: `${baseUrl}/pricing`,
-    lastmod: new Date().toISOString().split('T')[0],
-    changefreq: 'monthly',
-    priority: 0.9
-  },
-  {
     loc: `${baseUrl}/resources`,
     lastmod: new Date().toISOString().split('T')[0],
     changefreq: 'weekly',

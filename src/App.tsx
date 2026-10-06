@@ -1,9 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Layout from '@/components/layout/Layout'
 import Home from '@/pages/Home'
 import HowItWorks from '@/pages/HowItWorks'
 import AgingInPlaceScore from '@/pages/AgingInPlaceScore'
-import Pricing from '@/pages/Pricing'
 import Resources from '@/pages/Resources'
 import ArticlePage from '@/pages/ArticlePage'
 import About from '@/pages/About'
@@ -22,7 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/aging-in-place-score" element={<AgingInPlaceScore />} />
-          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/pricing" element={<Navigate to="/" replace />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/resources/:slug" element={<ArticlePage />} />
           <Route path="/about" element={<About />} />

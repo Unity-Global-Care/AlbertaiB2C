@@ -12,7 +12,6 @@ function Header() {
   const navigation = [
     { name: 'How It Works', href: '/how-it-works' },
     { name: 'Aging In Place Score™', href: '/aging-in-place-score' },
-    { name: 'Pricing', href: '/pricing' },
     { name: 'Resources', href: '/resources' },
     { name: 'About', href: '/about' },
     { name: 'Support', href: '/support' },

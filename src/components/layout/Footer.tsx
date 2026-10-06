@@ -17,7 +17,6 @@ function Footer() {
       { name: 'About Us', href: '/about' },
       { name: 'How It Works', href: '/how-it-works' },
       { name: 'Aging In Place Score™', href: '/aging-in-place-score' },
-      { name: 'Pricing', href: '/pricing' },
     ],
     resources: [
       { name: 'Resources', href: '/resources' },
