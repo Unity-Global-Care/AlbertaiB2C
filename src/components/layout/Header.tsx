@@ -8,6 +8,7 @@ function Header() {
   const signInUrl = getB2CSignInUrl()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
+  const isHome = location.pathname === '/'
 
   const navigation = [
     { name: 'How It Works', href: '/how-it-works' },
@@ -21,14 +22,30 @@ function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <img 
-              src="/images/logos/AlbertAI_Tagline_Color_R.png" 
-              alt="ALBERTai" 
-              className="h-14 md:h-16 w-auto"
-            />
-          </Link>
+          {/* Logo + Unity Way badge (home only) */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <Link to="/" className="flex items-center shrink-0">
+              <img
+                src="/images/logos/AlbertAI_Tagline_Color_R.png"
+                alt="ALBERTai"
+                className="h-14 md:h-16 w-auto"
+              />
+            </Link>
+            {isHome ? (
+              <Link
+                to="/hipaa"
+                className="flex shrink-0 items-center rounded-full ring-1 ring-gray-200/80 bg-white p-0.5 shadow-sm hover:ring-primary-200 transition-shadow"
+                title="The Unity Way — Responsible AI, Privacy, Security"
+                aria-label="The Unity Way — Official Pledge: Compliance, Security, Trust"
+              >
+                <img
+                  src="/images/branding/the-unity-way-badge-400.png"
+                  alt=""
+                  className="h-9 w-9 sm:h-11 sm:w-11 md:h-12 md:w-12 object-contain"
+                />
+              </Link>
+            ) : null}
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-6 xl:space-x-8">
